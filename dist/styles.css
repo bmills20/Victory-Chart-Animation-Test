@@ -1,0 +1,25 @@
+#chartcontainer
+{
+    width: 95%;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+}
+#btnTest
+{
+    margin-left: 20vw;
+    /* Button code from W3 */
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+#btnTest:hover
+{
+    background-color: #357a37;
+}

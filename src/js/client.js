@@ -1,80 +1,99 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryStack } from 'victory';
+import {VictoryLine, VictoryChart, VictoryAxis, VictoryTooltip} from 'victory';
 
-const data2012 = [
-  {quarter: 1, earnings: 13000},
-  {quarter: 2, earnings: 16500},
-  {quarter: 3, earnings: 14250},
-  {quarter: 4, earnings: 19000}
-];
 
-const data2013 = [
-  {quarter: 1, earnings: 15000},
-  {quarter: 2, earnings: 12500},
-  {quarter: 3, earnings: 19500},
-  {quarter: 4, earnings: 13000}
-];
+class App extends React.Component {
 
-const data2014 = [
-  {quarter: 1, earnings: 11500},
-  {quarter: 2, earnings: 13250},
-  {quarter: 3, earnings: 20000},
-  {quarter: 4, earnings: 15500}
-];
+  constructor(props) {
+    super(props);
+    this.numz = 0;
+    this.state = {
+      lineData: this.getLineData()
+    };
+  }
 
-const data2015 = [
-  {quarter: 1, earnings: 18000},
-  {quarter: 2, earnings: 13250},
-  {quarter: 3, earnings: 15000},
-  {quarter: 4, earnings: 12000}
-];
+  componentDidMount() {
+    // Create pointer variable 'self' so JavaScript will point to the right object
+    // when it is inside the jQuery method
+    var self = this;
+    $("#btnTest").click(function() {
+      if(self.numz == 1){
+        
+        $(this).html("Remove data");
+      }
+      else{
+        $(this).html("Add data");
+      }
+      self.setState({
+        lineData: self.getLineData()
+      });
+  
+    });
 
-class Main extends React.Component {
+  }
+
+  // Time-series data works best with scatter, line data is easy to use
+
+  getLineData() {
+    var d1 = [{ x: 1, y: 2 },
+      { x: 2, y: 3 },
+      { x: 3, y: 5 },
+      { x: 4, y: 4 },
+      { x: 5, y: 6 }]
+
+    var d2 = [{ x: 1, y: 2 },
+      { x: 2, y: 3 },
+      { x: 3, y: 5 },
+      { x: 4, y: 4 },
+      { x: 5, y: 6 },
+      { x: 10, y: 12 },
+      { x: 12, y: 13 },
+      { x: 13, y: 15 },
+      { x: 14, y: 14 },
+      { x: 15, y: 16 }]
+
+    if(this.numz == 0){
+      this.numz++;
+      return d1;
+    }
+    else if(this.numz == 1){
+      this.numz = 0;
+      return d2;
+    }
+  }
+
   render() {
     return (
-      <div>
-        <h1>Victory Tutorial</h1>
-        <VictoryChart
-          domainPadding={10}
-          theme={VictoryTheme.material}
-        >
-          <VictoryAxis
-            tickValues={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
-          />
-          <VictoryAxis
-            dependentAxis
-            tickFormat={(x) => (`$${x / 1000}k`)}
-          />
-          <VictoryStack
-            colorScale={"warm"}
-          >
-            <VictoryBar
-              data={data2012}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2013}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2014}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2015}
-              x={"quarter"}
-              y={"earnings"}
-            />
-          </VictoryStack>
-        </VictoryChart>
-      </div>
+      // Remove the delay from chart generation and set duration of the effect
+      <VictoryChart animate={{onLoad: {delay: 0, duration: 1500}, easing: "circleInOut"}}>
+        <VictoryLine
+        animate={{
+          onEnter: {
+            duration: 500
+          }
+        }}
+          data={this.state.lineData}
+          style={{
+            data: {
+              fill: "#c43a31",
+              opacity: 1.0
+            }
+          }}
+        />
+        <VictoryAxis
+          label="Y-Axis"
+        />
+        <VictoryAxis dependentAxis
+          label="X-Axis"
+        />
+      </VictoryChart>
+    
+    
     );
+    
   }
 }
 
-const app = document.getElementById('app');
-ReactDOM.render(<Main />, app);
+const app = document.getElementById('chartcontainer');
+ReactDOM.render(<App />, app);
